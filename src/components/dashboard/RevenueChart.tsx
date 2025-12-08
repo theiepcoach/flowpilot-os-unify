@@ -1,0 +1,89 @@
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+
+const data = [
+  { month: "Jan", revenue: 12400, expenses: 8200 },
+  { month: "Feb", revenue: 15800, expenses: 9100 },
+  { month: "Mar", revenue: 18200, expenses: 10500 },
+  { month: "Apr", revenue: 14600, expenses: 8800 },
+  { month: "May", revenue: 22400, expenses: 12100 },
+  { month: "Jun", revenue: 28900, expenses: 14200 },
+  { month: "Jul", revenue: 32100, expenses: 15800 },
+];
+
+export function RevenueChart() {
+  return (
+    <div className="rounded-xl bg-card p-6 shadow-md">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h3 className="text-lg font-heading font-semibold text-foreground">
+            Revenue Overview
+          </h3>
+          <p className="text-sm text-muted-foreground">Monthly performance</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full bg-accent" />
+            <span className="text-sm text-muted-foreground">Revenue</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full bg-muted-foreground/30" />
+            <span className="text-sm text-muted-foreground">Expenses</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+            <defs>
+              <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="hsl(165 82% 51%)" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="hsl(165 82% 51%)" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="expensesGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="hsl(215 15% 50%)" stopOpacity={0.2} />
+                <stop offset="95%" stopColor="hsl(215 15% 50%)" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(214 20% 90%)" vertical={false} />
+            <XAxis 
+              dataKey="month" 
+              axisLine={false} 
+              tickLine={false} 
+              tick={{ fill: "hsl(215 15% 50%)", fontSize: 12 }}
+            />
+            <YAxis 
+              axisLine={false} 
+              tickLine={false} 
+              tick={{ fill: "hsl(215 15% 50%)", fontSize: 12 }}
+              tickFormatter={(value) => `$${value / 1000}k`}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "hsl(0 0% 100%)",
+                border: "1px solid hsl(214 20% 90%)",
+                borderRadius: "8px",
+                boxShadow: "0 4px 12px hsl(213 68% 11% / 0.08)",
+              }}
+              formatter={(value: number) => [`$${value.toLocaleString()}`, undefined]}
+            />
+            <Area
+              type="monotone"
+              dataKey="expenses"
+              stroke="hsl(215 15% 50%)"
+              strokeWidth={2}
+              fill="url(#expensesGradient)"
+            />
+            <Area
+              type="monotone"
+              dataKey="revenue"
+              stroke="hsl(165 82% 51%)"
+              strokeWidth={2}
+              fill="url(#revenueGradient)"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
