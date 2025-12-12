@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateLead, LeadStatus } from "@/hooks/useLeads";
+import { useCreateNotification } from "@/hooks/useNotifications";
 
 interface AddLeadDialogProps {
   open: boolean;
@@ -32,6 +33,7 @@ export function AddLeadDialog({
   defaultStatus = "new",
 }: AddLeadDialogProps) {
   const createLead = useCreateLead();
+  const createNotification = useCreateNotification();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -60,7 +62,15 @@ export function AddLeadDialog({
         },
       },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
+          // Create notification for new lead
+          createNotification.mutate({
+            type: "lead_created",
+            title: "New Lead Added",
+            message: `${formData.firstName} ${formData.lastName} was added as a new lead`,
+            data: { lead_id: data?.id },
+          });
+          
           onOpenChange(false);
           setFormData({
             firstName: "",

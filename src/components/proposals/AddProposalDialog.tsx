@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCreateProposal } from "@/hooks/useProposals";
 import { useLeads } from "@/hooks/useLeads";
 import { useContacts } from "@/hooks/useContacts";
+import { useCreateNotification } from "@/hooks/useNotifications";
 
 interface AddProposalDialogProps {
   open: boolean;
@@ -15,6 +16,7 @@ interface AddProposalDialogProps {
 
 export function AddProposalDialog({ open, onOpenChange }: AddProposalDialogProps) {
   const createProposal = useCreateProposal();
+  const createNotification = useCreateNotification();
   const { data: leads } = useLeads();
   const { data: contacts } = useContacts();
   
@@ -26,11 +28,19 @@ export function AddProposalDialog({ open, onOpenChange }: AddProposalDialogProps
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    await createProposal.mutateAsync({
+    const result = await createProposal.mutateAsync({
       title,
       amount: parseFloat(amount),
       lead_id: leadId || null,
       contact_id: contactId || null,
+    });
+
+    // Create notification for new proposal
+    createNotification.mutate({
+      type: "proposal_status_changed",
+      title: "Proposal Created",
+      message: `${title} for $${parseFloat(amount).toLocaleString()} created`,
+      data: { proposal_id: result?.id, status: "draft" },
     });
 
     onOpenChange(false);
