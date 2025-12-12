@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCreateAppointment } from "@/hooks/useAppointments";
+import { useCreateNotification } from "@/hooks/useNotifications";
 import { Loader2, Video, Phone, MapPin } from "lucide-react";
 
 interface AddAppointmentDialogProps {
@@ -33,6 +34,7 @@ export function AddAppointmentDialog({
   defaultHour,
 }: AddAppointmentDialogProps) {
   const createAppointment = useCreateAppointment();
+  const createNotification = useCreateNotification();
   
   const getDefaultDate = () => {
     const d = defaultDate || new Date();
@@ -63,13 +65,21 @@ export function AddAppointmentDialog({
     const startDateTime = new Date(`${date}T${startTime}`);
     const endDateTime = new Date(`${date}T${endTime}`);
 
-    await createAppointment.mutateAsync({
+    const result = await createAppointment.mutateAsync({
       title,
       start_time: startDateTime.toISOString(),
       end_time: endDateTime.toISOString(),
       location: appointmentType === "in-person" ? location : appointmentType,
       description,
       status: "scheduled",
+    });
+
+    // Create notification for new appointment
+    createNotification.mutate({
+      type: "appointment_created",
+      title: "Appointment Scheduled",
+      message: `${title} scheduled for ${date} at ${startTime}`,
+      data: { appointment_id: result?.id },
     });
 
     // Reset form
