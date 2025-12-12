@@ -3,6 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import Auth from "./pages/Auth";
 import Index from "./pages/Index";
 import Leads from "./pages/Leads";
 import Schedule from "./pages/Schedule";
@@ -25,21 +28,24 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/leads" element={<Leads />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/finance" element={<Finance />} />
-          <Route path="/inbox" element={<Inbox />} />
-          <Route path="/automations" element={<Automations />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/marketing" element={<Marketing />} />
-          <Route path="/retention" element={<Retention />} />
-          <Route path="/proposals" element={<Proposals />} />
-          <Route path="/insights" element={<Insights />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+            <Route path="/leads" element={<ProtectedRoute><Leads /></ProtectedRoute>} />
+            <Route path="/schedule" element={<ProtectedRoute><Schedule /></ProtectedRoute>} />
+            <Route path="/finance" element={<ProtectedRoute><Finance /></ProtectedRoute>} />
+            <Route path="/inbox" element={<ProtectedRoute><Inbox /></ProtectedRoute>} />
+            <Route path="/automations" element={<ProtectedRoute><Automations /></ProtectedRoute>} />
+            <Route path="/team" element={<ProtectedRoute><Team /></ProtectedRoute>} />
+            <Route path="/marketing" element={<ProtectedRoute><Marketing /></ProtectedRoute>} />
+            <Route path="/retention" element={<ProtectedRoute><Retention /></ProtectedRoute>} />
+            <Route path="/proposals" element={<ProtectedRoute><Proposals /></ProtectedRoute>} />
+            <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

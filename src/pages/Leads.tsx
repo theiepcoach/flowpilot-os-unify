@@ -6,6 +6,7 @@ import { Plus, Search, Filter, Sparkles, Loader2 } from "lucide-react";
 import { useLeadsByStatus, LeadStatus, Lead } from "@/hooks/useLeads";
 import { PipelineColumn } from "@/components/leads/PipelineColumn";
 import { AddLeadDialog } from "@/components/leads/AddLeadDialog";
+import { LeadDetailDialog } from "@/components/leads/LeadDetailDialog";
 
 const PIPELINE_COLUMNS: { status: LeadStatus; title: string; color: string }[] = [
   { status: "new", title: "New", color: "bg-blue-500" },
@@ -20,6 +21,8 @@ const Leads = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [defaultStatus, setDefaultStatus] = useState<LeadStatus>("new");
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
 
   const handleAddLead = (status: LeadStatus) => {
     setDefaultStatus(status);
@@ -27,13 +30,13 @@ const Leads = () => {
   };
 
   const handleEditLead = (lead: Lead) => {
-    // TODO: Implement edit dialog
-    console.log("Edit lead:", lead);
+    setSelectedLead(lead);
+    setDetailDialogOpen(true);
   };
 
   const handleViewLead = (lead: Lead) => {
-    // TODO: Implement view dialog
-    console.log("View lead:", lead);
+    setSelectedLead(lead);
+    setDetailDialogOpen(true);
   };
 
   // Filter leads by search query
@@ -129,6 +132,13 @@ const Leads = () => {
         open={addDialogOpen}
         onOpenChange={setAddDialogOpen}
         defaultStatus={defaultStatus}
+      />
+
+      {/* Lead Detail Dialog */}
+      <LeadDetailDialog
+        lead={selectedLead}
+        open={detailDialogOpen}
+        onOpenChange={setDetailDialogOpen}
       />
     </AppLayout>
   );

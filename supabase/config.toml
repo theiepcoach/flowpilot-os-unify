@@ -1,1 +1,4 @@
 project_id = "yhdlplaxkbsauarnqzeg"
+
+[functions.generate-follow-up]
+verify_jwt = true
