@@ -1,23 +1,41 @@
 import { cn } from "@/lib/utils";
+import { useLeadsByStatus } from "@/hooks/useLeads";
+import { Loader2 } from "lucide-react";
 
 interface PipelineStage {
   name: string;
   count: number;
-  value: string;
   color: string;
+  status: string;
 }
 
-const stages: PipelineStage[] = [
-  { name: "New", count: 12, value: "$24,000", color: "bg-blue-500" },
-  { name: "Contacted", count: 8, value: "$18,500", color: "bg-purple-500" },
-  { name: "Qualified", count: 5, value: "$42,000", color: "bg-accent" },
-  { name: "Proposal", count: 3, value: "$28,000", color: "bg-orange-500" },
-  { name: "Won", count: 7, value: "$156,000", color: "bg-success" },
+const stageConfig: Omit<PipelineStage, "count">[] = [
+  { name: "New", color: "bg-blue-500", status: "new" },
+  { name: "Contacted", color: "bg-purple-500", status: "contacted" },
+  { name: "Qualified", color: "bg-accent", status: "qualified" },
+  { name: "Won", color: "bg-success", status: "won" },
+  { name: "Lost", color: "bg-destructive", status: "lost" },
 ];
 
-const totalValue = stages.reduce((acc, stage) => acc + parseInt(stage.value.replace(/[$,]/g, '')), 0);
-
 export function PipelineOverview() {
+  const { leads, leadsByStatus, isLoading } = useLeadsByStatus();
+
+  if (isLoading) {
+    return (
+      <div className="rounded-xl bg-card p-6 shadow-md flex items-center justify-center h-48">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  const stages: PipelineStage[] = stageConfig.map((stage) => ({
+    ...stage,
+    count: leadsByStatus[stage.status as keyof typeof leadsByStatus]?.length || 0,
+  }));
+
+  const totalLeads = leads?.length || 0;
+  const activeLeads = stages.filter(s => s.status !== "lost").reduce((acc, s) => acc + s.count, 0);
+
   return (
     <div className="rounded-xl bg-card p-6 shadow-md">
       <div className="mb-6 flex items-center justify-between">
@@ -25,20 +43,20 @@ export function PipelineOverview() {
           <h3 className="text-lg font-heading font-semibold text-foreground">
             Sales Pipeline
           </h3>
-          <p className="text-sm text-muted-foreground">35 active leads</p>
+          <p className="text-sm text-muted-foreground">{activeLeads} active leads</p>
         </div>
         <div className="text-right">
           <p className="text-2xl font-heading font-bold text-foreground">
-            ${totalValue.toLocaleString()}
+            {totalLeads}
           </p>
-          <p className="text-sm text-muted-foreground">Total value</p>
+          <p className="text-sm text-muted-foreground">Total leads</p>
         </div>
       </div>
 
       {/* Pipeline bar */}
       <div className="mb-6 flex h-3 overflow-hidden rounded-full bg-secondary">
         {stages.map((stage, index) => {
-          const percentage = (parseInt(stage.value.replace(/[$,]/g, '')) / totalValue) * 100;
+          const percentage = totalLeads > 0 ? (stage.count / totalLeads) * 100 : 0;
           return (
             <div
               key={stage.name}
@@ -63,7 +81,6 @@ export function PipelineOverview() {
               </span>
             </div>
             <p className="text-lg font-semibold text-foreground">{stage.count}</p>
-            <p className="text-xs text-muted-foreground">{stage.value}</p>
           </div>
         ))}
       </div>

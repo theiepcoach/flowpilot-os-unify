@@ -2,3 +2,12 @@ project_id = "yhdlplaxkbsauarnqzeg"
 
 [functions.generate-follow-up]
 verify_jwt = true
+
+[functions.webhook-lead-created]
+verify_jwt = false
+
+[functions.webhook-appointment-created]
+verify_jwt = false
+
+[functions.webhook-proposal-status-changed]
+verify_jwt = false
