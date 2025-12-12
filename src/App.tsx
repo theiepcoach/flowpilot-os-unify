@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { AdminRoute } from "@/components/auth/AdminRoute";
 import Auth from "./pages/Auth";
 import Index from "./pages/Index";
 import Leads from "./pages/Leads";
@@ -36,13 +37,13 @@ const App = () => (
             <Route path="/schedule" element={<ProtectedRoute><Schedule /></ProtectedRoute>} />
             <Route path="/finance" element={<ProtectedRoute><Finance /></ProtectedRoute>} />
             <Route path="/inbox" element={<ProtectedRoute><Inbox /></ProtectedRoute>} />
-            <Route path="/automations" element={<ProtectedRoute><Automations /></ProtectedRoute>} />
-            <Route path="/team" element={<ProtectedRoute><Team /></ProtectedRoute>} />
+            <Route path="/automations" element={<AdminRoute><Automations /></AdminRoute>} />
+            <Route path="/team" element={<AdminRoute><Team /></AdminRoute>} />
             <Route path="/marketing" element={<ProtectedRoute><Marketing /></ProtectedRoute>} />
             <Route path="/retention" element={<ProtectedRoute><Retention /></ProtectedRoute>} />
             <Route path="/proposals" element={<ProtectedRoute><Proposals /></ProtectedRoute>} />
-            <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
-            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/insights" element={<AdminRoute><Insights /></AdminRoute>} />
+            <Route path="/settings" element={<AdminRoute><Settings /></AdminRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
