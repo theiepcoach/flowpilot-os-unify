@@ -46,47 +46,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Business creation is now handled in the Auth page signup flow
+  // This function is kept for backward compatibility with existing users
   const checkAndCreateBusiness = async (userId: string) => {
     try {
-      // Check if user has a business
+      // Check if user has a business - if not, they need to complete signup
       const { data: profile } = await supabase
         .from('profiles')
         .select('business_id')
         .eq('id', userId)
         .single();
 
+      // If no business, the user will be redirected to complete signup in Auth page
       if (!profile?.business_id) {
-        // Create a new business for the user
-        const { data: business, error: businessError } = await supabase
-          .from('businesses')
-          .insert({ name: 'My Business' })
-          .select()
-          .single();
-
-        if (businessError) {
-          console.error('Error creating business:', businessError);
-          return;
-        }
-
-        // Update the profile with the business_id
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .update({ business_id: business.id })
-          .eq('id', userId);
-
-        if (profileError) {
-          console.error('Error updating profile:', profileError);
-          return;
-        }
-
-        // Create owner role for the user
-        const { error: roleError } = await supabase
-          .from('user_roles')
-          .insert({ user_id: userId, role: 'owner' });
-
-        if (roleError) {
-          console.error('Error creating user role:', roleError);
-        }
+        console.log('User needs to complete business setup');
       }
     } catch (error) {
       console.error('Error in checkAndCreateBusiness:', error);
