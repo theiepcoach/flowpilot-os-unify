@@ -5,12 +5,15 @@ import { Check, X, ArrowRight, Sparkles } from 'lucide-react';
 import { MarketingLayout } from '@/components/marketing/MarketingLayout';
 import { useBilling } from '@/hooks/useBilling';
 import { useAuth } from '@/hooks/useAuth';
+import { useState } from 'react';
+import { Switch } from '@/components/ui/switch';
 
 const plans = [
   {
     id: 'solo',
     name: 'Solo',
-    price: 79,
+    priceMonthly: 49,
+    priceAnnual: Math.round(49 * 12 * 0.65), // 35% off
     description: 'Perfect for solopreneurs and freelancers',
     popular: false,
     modules: [
@@ -37,7 +40,8 @@ const plans = [
   {
     id: 'pro',
     name: 'Pro',
-    price: 199,
+    priceMonthly: 99,
+    priceAnnual: Math.round(99 * 12 * 0.65), // 35% off
     description: 'For growing businesses ready to scale',
     popular: true,
     modules: [
@@ -64,7 +68,8 @@ const plans = [
   {
     id: 'enterprise',
     name: 'Enterprise',
-    price: 349,
+    priceMonthly: 149,
+    priceAnnual: Math.round(149 * 12 * 0.65), // 35% off
     description: 'For established businesses and agencies',
     popular: false,
     modules: [
@@ -110,6 +115,7 @@ const comparisonFeatures = [
 export default function Pricing() {
   const { user } = useAuth();
   const { createCheckoutSession, isLoading } = useBilling();
+  const [isAnnual, setIsAnnual] = useState(false);
 
   const handleChoosePlan = (planId: string) => {
     if (user) {
@@ -117,6 +123,13 @@ export default function Pricing() {
       createCheckoutSession(planId);
     }
     // If not logged in, the Link component will navigate to signup
+  };
+
+  const getDisplayPrice = (plan: typeof plans[0]) => {
+    if (isAnnual) {
+      return Math.round(plan.priceAnnual / 12);
+    }
+    return plan.priceMonthly;
   };
 
   return (
@@ -128,12 +141,27 @@ export default function Pricing() {
             <h1 className="font-heading text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
               Simple, transparent pricing
             </h1>
-            <p className="text-lg text-primary-foreground/80 mb-4">
+            <p className="text-lg text-primary-foreground/80 mb-6">
               Start with a 14-day free trial. No credit card required.
             </p>
-            <p className="text-primary-foreground/60">
-              All plans include core features. Upgrade or downgrade anytime.
-            </p>
+            
+            {/* Billing Toggle */}
+            <div className="flex items-center justify-center gap-4">
+              <span className={`text-sm ${!isAnnual ? 'text-primary-foreground font-medium' : 'text-primary-foreground/60'}`}>
+                Monthly
+              </span>
+              <Switch 
+                checked={isAnnual} 
+                onCheckedChange={setIsAnnual}
+                className="data-[state=checked]:bg-accent"
+              />
+              <span className={`text-sm ${isAnnual ? 'text-primary-foreground font-medium' : 'text-primary-foreground/60'}`}>
+                Annual
+              </span>
+              <span className="bg-accent/20 text-accent text-xs font-semibold px-2 py-1 rounded-full">
+                Save 35%
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -159,8 +187,13 @@ export default function Pricing() {
                   <CardTitle className="font-heading text-2xl">{plan.name}</CardTitle>
                   <p className="text-muted-foreground text-sm">{plan.description}</p>
                   <div className="mt-4">
-                    <span className="text-4xl font-bold">${plan.price}</span>
+                    <span className="text-4xl font-bold">${getDisplayPrice(plan)}</span>
                     <span className="text-muted-foreground"> / month</span>
+                    {isAnnual && (
+                      <p className="text-xs text-accent mt-1">
+                        ${plan.priceAnnual}/year (billed annually)
+                      </p>
+                    )}
                   </div>
                 </CardHeader>
                 <CardContent>
