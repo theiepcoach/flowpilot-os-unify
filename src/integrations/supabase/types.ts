@@ -208,6 +208,44 @@ export type Database = {
           },
         ]
       }
+      integrations: {
+        Row: {
+          business_id: string
+          created_at: string
+          enabled_events: Json
+          id: string
+          make_incoming_webhook_url: string | null
+          make_outgoing_webhook_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          enabled_events?: Json
+          id?: string
+          make_incoming_webhook_url?: string | null
+          make_outgoing_webhook_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          enabled_events?: Json
+          id?: string
+          make_incoming_webhook_url?: string | null
+          make_outgoing_webhook_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integrations_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: true
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           business_id: string
@@ -360,6 +398,33 @@ export type Database = {
           },
         ]
       }
+      plans: {
+        Row: {
+          created_at: string
+          id: string
+          included_modules: Json
+          limits: Json
+          name: string
+          price_monthly: number
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          included_modules?: Json
+          limits?: Json
+          name: string
+          price_monthly?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          included_modules?: Json
+          limits?: Json
+          name?: string
+          price_monthly?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -467,6 +532,57 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          business_id: string
+          created_at: string
+          current_period_end: string
+          current_period_start: string
+          id: string
+          plan_id: string
+          status: string
+          trial_ends_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string
+          id?: string
+          plan_id?: string
+          status?: string
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string
+          id?: string
+          plan_id?: string
+          status?: string
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: true
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
             referencedColumns: ["id"]
           },
         ]
@@ -587,6 +703,41 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      usage_counters: {
+        Row: {
+          business_id: string
+          counters: Json
+          id: string
+          period_end: string
+          period_start: string
+          updated_at: string
+        }
+        Insert: {
+          business_id: string
+          counters?: Json
+          id?: string
+          period_end?: string
+          period_start?: string
+          updated_at?: string
+        }
+        Update: {
+          business_id?: string
+          counters?: Json
+          id?: string
+          period_end?: string
+          period_start?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_counters_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
         ]

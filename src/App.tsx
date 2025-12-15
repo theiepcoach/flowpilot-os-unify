@@ -6,8 +6,23 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { AdminRoute } from "@/components/auth/AdminRoute";
+
+// Marketing pages
+import Home from "./pages/marketing/Home";
+import Features from "./pages/marketing/Features";
+import Pricing from "./pages/marketing/Pricing";
+import Security from "./pages/marketing/Security";
+
+// Auth
 import Auth from "./pages/Auth";
-import Index from "./pages/Index";
+
+// App pages
+import Dashboard from "./pages/Dashboard";
+import Modules from "./pages/Modules";
+import Billing from "./pages/Billing";
+import AppSettings from "./pages/AppSettings";
+
+// Module pages
 import Leads from "./pages/Leads";
 import Schedule from "./pages/Schedule";
 import Finance from "./pages/Finance";
@@ -18,7 +33,6 @@ import Marketing from "./pages/Marketing";
 import Retention from "./pages/Retention";
 import Proposals from "./pages/Proposals";
 import Insights from "./pages/Insights";
-import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,8 +45,22 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
+            {/* Public marketing pages */}
+            <Route path="/" element={<Home />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/security" element={<Security />} />
+            
+            {/* Auth */}
             <Route path="/auth" element={<Auth />} />
-            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+            
+            {/* App shell (protected) */}
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/modules" element={<ProtectedRoute><Modules /></ProtectedRoute>} />
+            <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
+            <Route path="/app-settings" element={<ProtectedRoute><AppSettings /></ProtectedRoute>} />
+            
+            {/* Module pages (protected) */}
             <Route path="/leads" element={<ProtectedRoute><Leads /></ProtectedRoute>} />
             <Route path="/schedule" element={<ProtectedRoute><Schedule /></ProtectedRoute>} />
             <Route path="/finance" element={<ProtectedRoute><Finance /></ProtectedRoute>} />
@@ -43,7 +71,7 @@ const App = () => (
             <Route path="/retention" element={<ProtectedRoute><Retention /></ProtectedRoute>} />
             <Route path="/proposals" element={<ProtectedRoute><Proposals /></ProtectedRoute>} />
             <Route path="/insights" element={<AdminRoute><Insights /></AdminRoute>} />
-            <Route path="/settings" element={<AdminRoute><Settings /></AdminRoute>} />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
