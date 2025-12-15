@@ -79,7 +79,7 @@ export default function Billing() {
                   {getStatusBadge(subscription?.status || 'trialing')}
                 </div>
                 <p className="text-muted-foreground mt-1">
-                  ${currentPlan?.price_monthly || 199}/month
+                  ${currentPlan?.price_monthly || 99}/month
                 </p>
                 {subscription?.current_period_end && (
                   <p className="text-sm text-muted-foreground flex items-center gap-1 mt-2">
