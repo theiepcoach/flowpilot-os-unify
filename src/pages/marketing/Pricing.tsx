@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, X, ArrowRight, Sparkles } from 'lucide-react';
 import { MarketingLayout } from '@/components/marketing/MarketingLayout';
+import { useBilling } from '@/hooks/useBilling';
+import { useAuth } from '@/hooks/useAuth';
 
 const plans = [
   {
@@ -106,6 +108,17 @@ const comparisonFeatures = [
 ];
 
 export default function Pricing() {
+  const { user } = useAuth();
+  const { createCheckoutSession, isLoading } = useBilling();
+
+  const handleChoosePlan = (planId: string) => {
+    if (user) {
+      // User is logged in, start checkout
+      createCheckoutSession(planId);
+    }
+    // If not logged in, the Link component will navigate to signup
+  };
+
   return (
     <MarketingLayout>
       {/* Hero */}
@@ -151,16 +164,28 @@ export default function Pricing() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <Button 
-                    className={`w-full mb-6 ${plan.popular ? 'bg-accent text-accent-foreground hover:bg-accent/90' : ''}`}
-                    variant={plan.popular ? 'default' : 'outline'}
-                    asChild
-                  >
-                    <Link to={`/auth?mode=signup&plan=${plan.id}`}>
+                  {user ? (
+                    <Button 
+                      className={`w-full mb-6 ${plan.popular ? 'bg-accent text-accent-foreground hover:bg-accent/90' : ''}`}
+                      variant={plan.popular ? 'default' : 'outline'}
+                      onClick={() => handleChoosePlan(plan.id)}
+                      disabled={isLoading}
+                    >
                       Choose {plan.name}
                       <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
+                    </Button>
+                  ) : (
+                    <Button 
+                      className={`w-full mb-6 ${plan.popular ? 'bg-accent text-accent-foreground hover:bg-accent/90' : ''}`}
+                      variant={plan.popular ? 'default' : 'outline'}
+                      asChild
+                    >
+                      <Link to={`/auth?mode=signup&plan=${plan.id}`}>
+                        Choose {plan.name}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  )}
 
                   <div className="space-y-4">
                     <h4 className="font-semibold text-sm">Modules included:</h4>

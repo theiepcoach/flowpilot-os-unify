@@ -128,35 +128,111 @@ export type Database = {
           },
         ]
       }
+      billing_events: {
+        Row: {
+          business_id: string | null
+          created_at: string
+          event_type: string
+          id: string
+          payload: Json | null
+          stripe_event_id: string
+        }
+        Insert: {
+          business_id?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          payload?: Json | null
+          stripe_event_id: string
+        }
+        Update: {
+          business_id?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          payload?: Json | null
+          stripe_event_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billing_events_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       businesses: {
         Row: {
+          billing_email: string | null
           brand_voice: string | null
           created_at: string
           id: string
           industry: string | null
           name: string
+          stripe_customer_id: string | null
           timezone: string | null
           updated_at: string
         }
         Insert: {
+          billing_email?: string | null
           brand_voice?: string | null
           created_at?: string
           id?: string
           industry?: string | null
           name: string
+          stripe_customer_id?: string | null
           timezone?: string | null
           updated_at?: string
         }
         Update: {
+          billing_email?: string | null
           brand_voice?: string | null
           created_at?: string
           id?: string
           industry?: string | null
           name?: string
+          stripe_customer_id?: string | null
           timezone?: string | null
           updated_at?: string
         }
         Relationships: []
+      }
+      checkout_sessions: {
+        Row: {
+          business_id: string
+          created_at: string
+          id: string
+          plan_id: string
+          status: string
+          stripe_session_id: string | null
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          id?: string
+          plan_id: string
+          status?: string
+          stripe_session_id?: string | null
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          id?: string
+          plan_id?: string
+          status?: string
+          stripe_session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkout_sessions_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       contacts: {
         Row: {
@@ -406,6 +482,7 @@ export type Database = {
           limits: Json
           name: string
           price_monthly: number
+          stripe_price_id: string | null
         }
         Insert: {
           created_at?: string
@@ -414,6 +491,7 @@ export type Database = {
           limits?: Json
           name: string
           price_monthly?: number
+          stripe_price_id?: string | null
         }
         Update: {
           created_at?: string
@@ -422,6 +500,7 @@ export type Database = {
           limits?: Json
           name?: string
           price_monthly?: number
+          stripe_price_id?: string | null
         }
         Relationships: []
       }
@@ -539,34 +618,43 @@ export type Database = {
       subscriptions: {
         Row: {
           business_id: string
+          cancel_at_period_end: boolean | null
           created_at: string
           current_period_end: string
           current_period_start: string
           id: string
           plan_id: string
           status: string
+          stripe_price_id: string | null
+          stripe_subscription_id: string | null
           trial_ends_at: string | null
           updated_at: string
         }
         Insert: {
           business_id: string
+          cancel_at_period_end?: boolean | null
           created_at?: string
           current_period_end?: string
           current_period_start?: string
           id?: string
           plan_id?: string
           status?: string
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
           trial_ends_at?: string | null
           updated_at?: string
         }
         Update: {
           business_id?: string
+          cancel_at_period_end?: boolean | null
           created_at?: string
           current_period_end?: string
           current_period_start?: string
           id?: string
           plan_id?: string
           status?: string
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
           trial_ends_at?: string | null
           updated_at?: string
         }
