@@ -33,6 +33,7 @@ import Marketing from "./pages/Marketing";
 import Retention from "./pages/Retention";
 import Proposals from "./pages/Proposals";
 import Insights from "./pages/Insights";
+import AdminBilling from "./pages/AdminBilling";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -71,6 +72,7 @@ const App = () => (
             <Route path="/retention" element={<ProtectedRoute><Retention /></ProtectedRoute>} />
             <Route path="/proposals" element={<ProtectedRoute><Proposals /></ProtectedRoute>} />
             <Route path="/insights" element={<AdminRoute><Insights /></AdminRoute>} />
+            <Route path="/admin/billing" element={<AdminRoute><AdminBilling /></AdminRoute>} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

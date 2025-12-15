@@ -27,6 +27,9 @@ export interface Subscription {
   current_period_start: string;
   current_period_end: string;
   created_at: string;
+  cancel_at_period_end?: boolean;
+  stripe_subscription_id?: string | null;
+  stripe_price_id?: string | null;
 }
 
 export interface UsageCounters {
