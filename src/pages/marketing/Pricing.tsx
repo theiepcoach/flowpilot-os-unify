@@ -142,7 +142,7 @@ export default function Pricing() {
               Simple, transparent pricing
             </h1>
             <p className="text-lg text-primary-foreground/80 mb-6">
-              Start with a 14-day free trial. No credit card required.
+              Start with a 7-day free trial. No credit card required.
             </p>
             
             {/* Billing Toggle */}
@@ -303,7 +303,7 @@ export default function Pricing() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="font-heading text-3xl font-bold mb-4">Questions?</h2>
             <p className="text-muted-foreground mb-8">
-              Start your 14-day free trial today. No credit card required. 
+              Start your 7-day free trial today. No credit card required. 
               Upgrade, downgrade, or cancel anytime.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

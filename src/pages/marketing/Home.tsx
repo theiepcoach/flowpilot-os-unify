@@ -188,7 +188,7 @@ export default function Home() {
               Simple, transparent pricing
             </h2>
             <p className="text-primary-foreground/80 text-lg mb-8 max-w-2xl mx-auto">
-              Start with a 14-day free trial. No credit card required.
+              Start with a 7-day free trial. No credit card required.
             </p>
             <div className="flex flex-wrap justify-center gap-8 mb-8">
               <div className="text-center">
