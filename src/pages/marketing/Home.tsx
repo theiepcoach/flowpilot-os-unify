@@ -172,7 +172,8 @@ export default function Home() {
               10 Powerful Modules. One Platform.
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Every tool you need to run your business, intelligently connected and AI-enhanced.
+              Every tool you need to run your business
+Intelligently connected and AI-enhanced
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
