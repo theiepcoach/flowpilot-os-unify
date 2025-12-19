@@ -22,6 +22,29 @@ export const EVENT_TYPES = [
   { key: "transaction_created", label: "Transaction Created", description: "Triggered when revenue/expense is logged" },
 ] as const;
 
+// Validate webhook URL to prevent SSRF attacks
+function isValidWebhookUrl(url: string): { valid: boolean; error?: string } {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:") {
+      return { valid: false, error: "Webhook URL must use HTTPS" };
+    }
+    const hostname = parsed.hostname.toLowerCase();
+    if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "0.0.0.0") {
+      return { valid: false, error: "Webhook URL cannot point to localhost" };
+    }
+    if (hostname.startsWith("10.") || hostname.startsWith("192.168.") || hostname.startsWith("169.254.")) {
+      return { valid: false, error: "Webhook URL cannot point to private networks" };
+    }
+    if (/^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname)) {
+      return { valid: false, error: "Webhook URL cannot point to private networks" };
+    }
+    return { valid: true };
+  } catch {
+    return { valid: false, error: "Invalid URL format" };
+  }
+}
+
 export const useWebhookSettings = () => {
   const { user } = useAuth();
 
@@ -62,6 +85,14 @@ export const useUpsertWebhookSetting = () => {
       webhook_url: string;
       enabled: boolean;
     }) => {
+      // Validate webhook URL if provided
+      if (webhook_url && webhook_url.trim()) {
+        const validation = isValidWebhookUrl(webhook_url.trim());
+        if (!validation.valid) {
+          throw new Error(validation.error || "Invalid webhook URL");
+        }
+      }
+
       const { data: profile } = await supabase
         .from("profiles")
         .select("business_id")
@@ -76,7 +107,7 @@ export const useUpsertWebhookSetting = () => {
           {
             business_id: profile.business_id,
             event_type,
-            webhook_url,
+            webhook_url: webhook_url.trim() || null,
             enabled,
           },
           { onConflict: "business_id,event_type" }
@@ -91,9 +122,8 @@ export const useUpsertWebhookSetting = () => {
       queryClient.invalidateQueries({ queryKey: ["webhook-settings"] });
       toast.success("Webhook setting saved");
     },
-    onError: (error) => {
-      toast.error("Failed to save webhook setting");
-      console.error(error);
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to save webhook setting");
     },
   });
 };
@@ -107,6 +137,12 @@ export const useTestWebhook = () => {
       event_type: string;
       webhook_url: string;
     }) => {
+      // Validate webhook URL before testing
+      const validation = isValidWebhookUrl(webhook_url);
+      if (!validation.valid) {
+        throw new Error(validation.error || "Invalid webhook URL");
+      }
+
       const testPayload = {
         event: event_type,
         test: true,
@@ -119,18 +155,20 @@ export const useTestWebhook = () => {
       const response = await fetch(webhook_url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        mode: "no-cors",
         body: JSON.stringify(testPayload),
       });
+
+      if (!response.ok) {
+        throw new Error(`Webhook test failed with status ${response.status}`);
+      }
 
       return { success: true };
     },
     onSuccess: () => {
       toast.success("Test webhook sent! Check your Make.com scenario.");
     },
-    onError: (error) => {
-      toast.error("Failed to send test webhook");
-      console.error(error);
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to send test webhook");
     },
   });
 };
