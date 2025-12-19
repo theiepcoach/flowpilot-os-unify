@@ -21,17 +21,45 @@ export default function Dashboard() {
       <div className="space-y-6">
         {/* Trial Banner */}
         {isTrialing && daysLeftInTrial > 0 && (
-          <Card className="border-accent bg-accent/5">
-            <CardContent className="p-4 flex items-center justify-between">
+          <Card className="border-accent bg-gradient-to-r from-accent/10 to-accent/5 shadow-teal">
+            <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <AlertTriangle className="h-5 w-5 text-accent" />
-                <span>
-                  <strong>{daysLeftInTrial} days left</strong> in your Pro trial. 
-                  Upgrade to keep all features.
-                </span>
+                <div className="h-12 w-12 rounded-full bg-accent/20 flex items-center justify-center">
+                  <span className="text-xl font-bold text-accent">{daysLeftInTrial}</span>
+                </div>
+                <div>
+                  <p className="font-semibold">
+                    {daysLeftInTrial === 1 ? 'Last day' : `${daysLeftInTrial} days left`} of your Pro trial
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Upgrade now to keep all features after your trial ends
+                  </p>
+                </div>
               </div>
-              <Button size="sm" className="bg-accent text-accent-foreground" asChild>
-                <Link to="/billing">Choose Plan</Link>
+              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 shrink-0" asChild>
+                <Link to="/billing">Upgrade Now <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Expired Trial / Past Due Banner */}
+        {subscription && (subscription.status === 'past_due' || subscription.status === 'canceled') && (
+          <Card className="border-destructive bg-destructive/10">
+            <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="h-6 w-6 text-destructive" />
+                <div>
+                  <p className="font-semibold text-destructive">
+                    {subscription.status === 'past_due' ? 'Payment Past Due' : 'Subscription Inactive'}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Update your payment method to restore access to all features
+                  </p>
+                </div>
+              </div>
+              <Button variant="destructive" className="shrink-0" asChild>
+                <Link to="/billing">Fix Payment</Link>
               </Button>
             </CardContent>
           </Card>
