@@ -193,10 +193,10 @@ export default function Auth() {
 
       if (roleError) throw roleError;
 
-      // Create a 14-day Pro trial subscription
+      // Create a 7-day Pro trial subscription
       const now = new Date();
       const trialEnd = new Date(now);
-      trialEnd.setDate(trialEnd.getDate() + 14);
+      trialEnd.setDate(trialEnd.getDate() + 7);
       const periodEnd = new Date(now);
       periodEnd.setMonth(periodEnd.getMonth() + 1);
 
@@ -371,7 +371,7 @@ export default function Auth() {
                   </form>
                   {selectedPlan && (
                     <p className="text-center text-sm text-muted-foreground mt-4">
-                      You'll start with a 14-day free trial of the{' '}
+                      You'll start with a 7-day free trial of the{' '}
                       <span className="font-medium text-foreground capitalize">{selectedPlan}</span> plan
                     </p>
                   )}

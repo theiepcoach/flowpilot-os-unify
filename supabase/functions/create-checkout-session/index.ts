@@ -200,7 +200,7 @@ serve(async (req) => {
     };
 
     if (shouldApplyTrial) {
-      sessionConfig.subscription_data = { trial_period_days: 14 };
+      sessionConfig.subscription_data = { trial_period_days: 7 };
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
