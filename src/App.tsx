@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { SubscriptionRoute } from "@/components/auth/SubscriptionRoute";
 import { AdminRoute } from "@/components/auth/AdminRoute";
 
 // Marketing pages
@@ -55,23 +56,23 @@ const App = () => (
             {/* Auth */}
             <Route path="/auth" element={<Auth />} />
             
-            {/* App shell (protected) */}
+            {/* App shell (protected - always accessible) */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/modules" element={<ProtectedRoute><Modules /></ProtectedRoute>} />
             <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
             <Route path="/app-settings" element={<ProtectedRoute><AppSettings /></ProtectedRoute>} />
             
-            {/* Module pages (protected) */}
-            <Route path="/leads" element={<ProtectedRoute><Leads /></ProtectedRoute>} />
-            <Route path="/schedule" element={<ProtectedRoute><Schedule /></ProtectedRoute>} />
-            <Route path="/finance" element={<ProtectedRoute><Finance /></ProtectedRoute>} />
-            <Route path="/inbox" element={<ProtectedRoute><Inbox /></ProtectedRoute>} />
-            <Route path="/automations" element={<AdminRoute><Automations /></AdminRoute>} />
-            <Route path="/team" element={<AdminRoute><Team /></AdminRoute>} />
-            <Route path="/marketing" element={<ProtectedRoute><Marketing /></ProtectedRoute>} />
-            <Route path="/retention" element={<ProtectedRoute><Retention /></ProtectedRoute>} />
-            <Route path="/proposals" element={<ProtectedRoute><Proposals /></ProtectedRoute>} />
-            <Route path="/insights" element={<AdminRoute><Insights /></AdminRoute>} />
+            {/* Module pages (subscription required) */}
+            <Route path="/modules" element={<SubscriptionRoute><Modules /></SubscriptionRoute>} />
+            <Route path="/leads" element={<SubscriptionRoute><Leads /></SubscriptionRoute>} />
+            <Route path="/schedule" element={<SubscriptionRoute><Schedule /></SubscriptionRoute>} />
+            <Route path="/finance" element={<SubscriptionRoute><Finance /></SubscriptionRoute>} />
+            <Route path="/inbox" element={<SubscriptionRoute><Inbox /></SubscriptionRoute>} />
+            <Route path="/automations" element={<SubscriptionRoute><Automations /></SubscriptionRoute>} />
+            <Route path="/team" element={<SubscriptionRoute><Team /></SubscriptionRoute>} />
+            <Route path="/marketing" element={<SubscriptionRoute><Marketing /></SubscriptionRoute>} />
+            <Route path="/retention" element={<SubscriptionRoute><Retention /></SubscriptionRoute>} />
+            <Route path="/proposals" element={<SubscriptionRoute><Proposals /></SubscriptionRoute>} />
+            <Route path="/insights" element={<SubscriptionRoute><Insights /></SubscriptionRoute>} />
             <Route path="/admin/billing" element={<AdminRoute><AdminBilling /></AdminRoute>} />
             
             <Route path="*" element={<NotFound />} />
