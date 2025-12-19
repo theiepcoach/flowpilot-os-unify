@@ -1,45 +1,93 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { 
-  Users, Calendar, DollarSign, MessageSquare, Zap, UserCheck, 
-  Megaphone, Heart, FileText, BarChart3, ArrowRight, CheckCircle,
-  XCircle, Play
-} from 'lucide-react';
+import { Users, Calendar, DollarSign, MessageSquare, Zap, UserCheck, Megaphone, Heart, FileText, BarChart3, ArrowRight, CheckCircle, XCircle, Play } from 'lucide-react';
 import { MarketingLayout } from '@/components/marketing/MarketingLayout';
-
-const modules = [
-  { id: 'leadpilot', name: 'LeadPilot', icon: Users, description: 'Capture, score, and convert leads automatically' },
-  { id: 'schedulepilot', name: 'SchedulePilot', icon: Calendar, description: 'Smart scheduling and appointment management' },
-  { id: 'financepilot', name: 'FinancePilot', icon: DollarSign, description: 'Track revenue, expenses, and profitability' },
-  { id: 'inboxpilot', name: 'InboxPilot', icon: MessageSquare, description: 'Unified messaging across all channels' },
-  { id: 'automatepilot', name: 'AutomatePilot', icon: Zap, description: 'Build no-code workflow automations' },
-  { id: 'teampilot', name: 'TeamPilot', icon: UserCheck, description: 'Task management and team coordination' },
-  { id: 'marketingpilot', name: 'MarketingPilot', icon: Megaphone, description: 'AI-powered content and campaigns' },
-  { id: 'retainpilot', name: 'RetainPilot', icon: Heart, description: 'Customer retention and loyalty programs' },
-  { id: 'proposalpilot', name: 'ProposalPilot', icon: FileText, description: 'Generate and track proposals' },
-  { id: 'insightpilot', name: 'InsightPilot', icon: BarChart3, description: 'Analytics and business intelligence' },
-];
-
-const problems = [
-  { icon: XCircle, text: 'Missed leads falling through the cracks' },
-  { icon: XCircle, text: 'Scheduling chaos and double-bookings' },
-  { icon: XCircle, text: 'Scattered communication across apps' },
-  { icon: XCircle, text: 'No visibility into your finances' },
-  { icon: XCircle, text: 'Manual busywork eating your time' },
-];
-
-const solutions = [
-  { icon: CheckCircle, text: 'One unified platform for everything' },
-  { icon: CheckCircle, text: 'AI-powered automation built-in' },
-  { icon: CheckCircle, text: 'Real-time insights and analytics' },
-  { icon: CheckCircle, text: 'Works with Make.com & your stack' },
-  { icon: CheckCircle, text: 'Scale from solo to enterprise' },
-];
-
+const modules = [{
+  id: 'leadpilot',
+  name: 'LeadPilot',
+  icon: Users,
+  description: 'Capture, score, and convert leads automatically'
+}, {
+  id: 'schedulepilot',
+  name: 'SchedulePilot',
+  icon: Calendar,
+  description: 'Smart scheduling and appointment management'
+}, {
+  id: 'financepilot',
+  name: 'FinancePilot',
+  icon: DollarSign,
+  description: 'Track revenue, expenses, and profitability'
+}, {
+  id: 'inboxpilot',
+  name: 'InboxPilot',
+  icon: MessageSquare,
+  description: 'Unified messaging across all channels'
+}, {
+  id: 'automatepilot',
+  name: 'AutomatePilot',
+  icon: Zap,
+  description: 'Build no-code workflow automations'
+}, {
+  id: 'teampilot',
+  name: 'TeamPilot',
+  icon: UserCheck,
+  description: 'Task management and team coordination'
+}, {
+  id: 'marketingpilot',
+  name: 'MarketingPilot',
+  icon: Megaphone,
+  description: 'AI-powered content and campaigns'
+}, {
+  id: 'retainpilot',
+  name: 'RetainPilot',
+  icon: Heart,
+  description: 'Customer retention and loyalty programs'
+}, {
+  id: 'proposalpilot',
+  name: 'ProposalPilot',
+  icon: FileText,
+  description: 'Generate and track proposals'
+}, {
+  id: 'insightpilot',
+  name: 'InsightPilot',
+  icon: BarChart3,
+  description: 'Analytics and business intelligence'
+}];
+const problems = [{
+  icon: XCircle,
+  text: 'Missed leads falling through the cracks'
+}, {
+  icon: XCircle,
+  text: 'Scheduling chaos and double-bookings'
+}, {
+  icon: XCircle,
+  text: 'Scattered communication across apps'
+}, {
+  icon: XCircle,
+  text: 'No visibility into your finances'
+}, {
+  icon: XCircle,
+  text: 'Manual busywork eating your time'
+}];
+const solutions = [{
+  icon: CheckCircle,
+  text: 'One unified platform for everything'
+}, {
+  icon: CheckCircle,
+  text: 'AI-powered automation built-in'
+}, {
+  icon: CheckCircle,
+  text: 'Real-time insights and analytics'
+}, {
+  icon: CheckCircle,
+  text: 'Works with Make.com & your stack'
+}, {
+  icon: CheckCircle,
+  text: 'Scale from solo to enterprise'
+}];
 export default function Home() {
-  return (
-    <MarketingLayout>
+  return <MarketingLayout>
       {/* Hero Section */}
       <section className="relative overflow-hidden gradient-navy py-20 lg:py-32">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsl(165_82%_51%_/_0.15),_transparent_50%)]" />
@@ -49,11 +97,14 @@ export default function Home() {
               Run your entire business from{' '}
               <span className="text-gradient">one intelligent platform</span>
             </h1>
-            <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '0.1s' }}>
-              FlowPilot OS replaces 10+ tools with one unified operating system. 
-              Leads, scheduling, finance, messaging, automation — all powered by AI.
+            <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto animate-fade-in" style={{
+            animationDelay: '0.1s'
+          }}>
+              FlowPilot OS replaces 10+ tools with one unified operating system. Leads, scheduling, finance, messaging, automation all powered by AI.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{
+            animationDelay: '0.2s'
+          }}>
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 glow-teal" asChild>
                 <Link to="/auth?mode=signup">
                   Start Free Trial
@@ -72,9 +123,7 @@ export default function Home() {
         <div className="container mt-16">
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-50">
             <span className="text-primary-foreground/60 text-sm">Trusted by leading businesses</span>
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-8 w-24 bg-primary-foreground/10 rounded" />
-            ))}
+            {[1, 2, 3, 4, 5].map(i => <div key={i} className="h-8 w-24 bg-primary-foreground/10 rounded" />)}
           </div>
         </div>
       </section>
@@ -91,12 +140,10 @@ export default function Home() {
                 You're juggling 10 different apps, missing leads, and spending hours on busywork instead of growing your business.
               </p>
               <ul className="space-y-4">
-                {problems.map((problem, i) => (
-                  <li key={i} className="flex items-center gap-3 text-foreground">
+                {problems.map((problem, i) => <li key={i} className="flex items-center gap-3 text-foreground">
                     <problem.icon className="h-5 w-5 text-destructive flex-shrink-0" />
                     <span>{problem.text}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
             </div>
             <div>
@@ -107,12 +154,10 @@ export default function Home() {
                 One platform that handles everything. AI does the heavy lifting while you focus on what matters.
               </p>
               <ul className="space-y-4">
-                {solutions.map((solution, i) => (
-                  <li key={i} className="flex items-center gap-3 text-foreground">
+                {solutions.map((solution, i) => <li key={i} className="flex items-center gap-3 text-foreground">
                     <solution.icon className="h-5 w-5 text-accent flex-shrink-0" />
                     <span>{solution.text}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
             </div>
           </div>
@@ -131,8 +176,7 @@ export default function Home() {
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-            {modules.map((module) => (
-              <Card key={module.id} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 gradient-card">
+            {modules.map(module => <Card key={module.id} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 gradient-card">
                 <CardContent className="p-6">
                   <div className="h-12 w-12 rounded-lg gradient-teal flex items-center justify-center mb-4 group-hover:glow-teal transition-shadow">
                     <module.icon className="h-6 w-6 text-accent-foreground" />
@@ -140,8 +184,7 @@ export default function Home() {
                   <h3 className="font-heading font-semibold mb-2">{module.name}</h3>
                   <p className="text-sm text-muted-foreground">{module.description}</p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -233,6 +276,5 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </MarketingLayout>
-  );
+    </MarketingLayout>;
 }
