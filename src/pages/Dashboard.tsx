@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { Link } from 'react-router-dom';
 import { useModuleAccess } from '@/hooks/useSubscription';
 import { Users, Calendar, DollarSign, MessageSquare, ArrowRight, AlertTriangle } from 'lucide-react';
+import { toast } from 'sonner';
 
 const kpiCards = [
   { title: 'New Leads', value: '24', change: '+12%', icon: Users, color: 'text-blue-500' },
@@ -15,6 +17,27 @@ const kpiCards = [
 
 export default function Dashboard() {
   const { plan, subscription, usage, isTrialing, daysLeftInTrial, getUsagePercentage, isNearLimit } = useModuleAccess();
+  const hasShownTrialWarning = useRef(false);
+
+  // Show toast warning when trial is about to expire (2 days or less)
+  useEffect(() => {
+    if (isTrialing && daysLeftInTrial > 0 && daysLeftInTrial <= 2 && !hasShownTrialWarning.current) {
+      hasShownTrialWarning.current = true;
+      toast.warning(
+        daysLeftInTrial === 1 
+          ? "Your trial expires tomorrow!" 
+          : `Your trial expires in ${daysLeftInTrial} days!`,
+        {
+          description: "Upgrade now to keep access to all features.",
+          duration: 10000,
+          action: {
+            label: "Upgrade",
+            onClick: () => window.location.href = "/billing",
+          },
+        }
+      );
+    }
+  }, [isTrialing, daysLeftInTrial]);
 
   return (
     <AppLayout title="Dashboard">
