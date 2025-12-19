@@ -157,6 +157,11 @@ export default function Auth() {
       return;
     }
 
+    if (businessName.length > 255) {
+      toast.error('Business name is too long');
+      return;
+    }
+
     if (!user) {
       toast.error('Please sign in first');
       return;
@@ -165,75 +170,23 @@ export default function Auth() {
     setIsLoading(true);
 
     try {
-      // Create the business
-      const { data: business, error: businessError } = await supabase
-        .from('businesses')
-        .insert({
-          name: businessName,
+      // Call secure edge function to create business and assign role
+      const { data, error } = await supabase.functions.invoke('create-business', {
+        body: {
+          business_name: businessName.trim(),
           industry: industry || null,
           timezone: timezone,
-        })
-        .select()
-        .single();
+          plan_id: selectedPlan || 'pro',
+        },
+      });
 
-      if (businessError) throw businessError;
+      if (error) {
+        throw new Error(error.message || 'Failed to create business');
+      }
 
-      // Update the profile with business_id
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({ business_id: business.id })
-        .eq('id', user.id);
-
-      if (profileError) throw profileError;
-
-      // Create owner role
-      const { error: roleError } = await supabase
-        .from('user_roles')
-        .insert({ user_id: user.id, role: 'owner' });
-
-      if (roleError) throw roleError;
-
-      // Create a 7-day Pro trial subscription
-      const now = new Date();
-      const trialEnd = new Date(now);
-      trialEnd.setDate(trialEnd.getDate() + 7);
-      const periodEnd = new Date(now);
-      periodEnd.setMonth(periodEnd.getMonth() + 1);
-
-      const planToUse = selectedPlan || 'pro';
-
-      const { error: subError } = await supabase
-        .from('subscriptions')
-        .insert({
-          business_id: business.id,
-          plan_id: planToUse,
-          status: planToUse === 'pro' ? 'trialing' : 'active',
-          trial_ends_at: planToUse === 'pro' ? trialEnd.toISOString() : null,
-          current_period_start: now.toISOString(),
-          current_period_end: periodEnd.toISOString(),
-        });
-
-      if (subError) throw subError;
-
-      // Create initial usage counters
-      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-      const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
-      await supabase
-        .from('usage_counters')
-        .insert({
-          business_id: business.id,
-          period_start: monthStart.toISOString().split('T')[0],
-          period_end: monthEnd.toISOString().split('T')[0],
-          counters: {
-            leads: 0,
-            messages: 0,
-            automations_active: 0,
-            team_members: 1,
-            proposals_sent: 0,
-            reports_generated: 0,
-          },
-        });
+      if (!data?.success) {
+        throw new Error(data?.error || 'Failed to create business');
+      }
 
       toast.success('Business created! Welcome to FlowPilot OS.');
       navigate('/dashboard', { replace: true });
@@ -400,6 +353,7 @@ export default function Auth() {
                     placeholder="Acme Consulting"
                     value={businessName}
                     onChange={(e) => setBusinessName(e.target.value)}
+                    maxLength={255}
                     required
                   />
                 </div>
