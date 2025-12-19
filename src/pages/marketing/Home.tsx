@@ -171,10 +171,8 @@ export default function Home() {
             <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
               10 Powerful Modules. One Platform.
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Every tool you need to run your business
- Intelligently connected and AI-enhanced
-            </p>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">Every tool you need to run your business 
+Intelligently connected and AI-enhanced</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {modules.map(module => <Card key={module.id} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 gradient-card">
